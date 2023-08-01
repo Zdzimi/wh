@@ -2,10 +2,12 @@ package pl.zdzimi.wh.service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import org.springframework.stereotype.Service;
 
+@Service
 class DateProvider {
 
-  static Date beforeNow(int days) {
+  public Date beforeNow(int days) {
     return Date.valueOf(LocalDate.now().minusDays(days));
   }
 

@@ -15,20 +15,22 @@ public class MainService {
   private final CommodityRepository commodityRepository;
   private final WareStatsMapper wareStatsMapper;
   private final WareMapper wareMapper;
+  private final DateProvider dateProvider;
 
   public OrderAndDiscount getCandidates(int days, int lessThan, int moreThan) {
     OrderAndDiscount orderAndDiscount = new OrderAndDiscount();
-    commodityRepository.findAllAfter(DateProvider.beforeNow(days)).stream()
+    commodityRepository.findAllAfter(dateProvider.beforeNow(days)).stream()
         .map(wareStatsMapper::map)
-        .forEach(wareStats ->  orderAndDiscount.receiveIfMatch(wareStats, lessThan, moreThan));
+        .forEach(wareStats -> orderAndDiscount.receiveIfMatch(wareStats, lessThan, moreThan));
     orderAndDiscount.sort();
     return orderAndDiscount;
   }
 
-  public Ware getHistory(long id) {
+  public Ware getHistory(long id, int days, int lessThan, int moreThan) {
     return wareMapper.map(
         commodityRepository.findById(id)
-            .orElseThrow(() -> new CommodityNotFound("Commodity no: " + id + " does not exists."))
+            .orElseThrow(() -> new CommodityNotFound("Commodity no: " + id + " does not exists.")),
+        days, lessThan, moreThan
     );
   }
 }

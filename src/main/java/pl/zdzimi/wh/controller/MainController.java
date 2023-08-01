@@ -15,8 +15,13 @@ public class MainController {
   private final MainService mainService;
 
   @GetMapping("/commodity/{id}")
-  public Ware getCommodity(@PathVariable long id) {
-    return mainService.getHistory(id);
+  public Ware getCommodity(
+      @PathVariable long id,
+      @RequestParam(required = false, defaultValue = "30") int days,
+      @RequestParam(required = false, defaultValue = "30") int lessThan,
+      @RequestParam(required = false, defaultValue = "70") int moreThan
+  ) {
+    return mainService.getHistory(id, days, lessThan, moreThan);
   }
 
   @GetMapping("/commodity")

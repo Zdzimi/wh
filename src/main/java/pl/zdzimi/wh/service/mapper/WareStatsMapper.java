@@ -10,7 +10,7 @@ import pl.zdzimi.wh.data.entity.DocumentEntry;
 @Service
 public class WareStatsMapper {
 
-  private static final List<Integer> SALE_TYPES = Arrays.asList(4, 8, 10, 21);
+  private static final List<Integer> SALE_TYPES = Arrays.asList(10, 21);
 
   public WareStats map(Commodity commodity) {
     WareStats wareStats = new WareStats();
