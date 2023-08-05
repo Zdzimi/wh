@@ -28,9 +28,10 @@ public class MainService {
 
   public Ware getHistory(long id, int days, int lessThan, int moreThan) {
     return wareMapper.map(
-        commodityRepository.findById(id)
+        commodityRepository.findById(id, dateProvider.beforeNow(days))
             .orElseThrow(() -> new CommodityNotFound("Commodity no: " + id + " does not exists.")),
-        days, lessThan, moreThan
+        lessThan, moreThan
     );
   }
+
 }

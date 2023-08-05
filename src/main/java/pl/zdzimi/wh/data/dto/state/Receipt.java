@@ -1,7 +1,6 @@
 package pl.zdzimi.wh.data.dto.state;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import pl.zdzimi.wh.data.entity.DocumentEntry;
@@ -10,15 +9,20 @@ import pl.zdzimi.wh.data.entity.DocumentEntry;
 @Setter
 public abstract class Receipt {
 
-  protected long documentId;
-  protected int receiptDayOrder;
-  protected LocalDate date;
-  protected String code;
-  protected int type;
+  private long documentId;
+  private int receiptDayOrder;
+  private LocalDate date;
+  private String code;
+  private int type;
   protected int increased;
   protected int decreased;
-  protected int amountAfterReceipt;
+  private int amountAfterReceipt;
   protected int amountBeforeReceipt;
+
+  private int lowerPartOfSales;
+  private int higherPartOfSales;
+  private int sales;
+  private double partOfSales;
 
   public Receipt(DocumentEntry entry, int amountAfterReceipt) {
     this.documentId = entry.getDocumentId();
@@ -29,14 +33,21 @@ public abstract class Receipt {
     this.amountAfterReceipt = amountAfterReceipt;
   }
 
-  public static Receipt receipt(DocumentEntry entry, int amountAfterReceipt) {
-    switch (entry.getDocument().getType()) {
-      case 2: return new PzReceipt(entry, amountAfterReceipt);
-      case 3, 4, 8, 9: return new IncreasedReceipt(entry, amountAfterReceipt);
-      case 10, 21: return new DecreasedReceipt(entry, amountAfterReceipt);
-      case 16, 88: return new MixedReceipt(entry, amountAfterReceipt);
-      default: throw new IllegalArgumentException();
-    }
+  public static Receipt create(DocumentEntry entry, int amountAfterReceipt) {
+    return switch (entry.getDocument().getType()) {
+      case 2, 3, 4, 8, 9 -> new IncreasedReceipt(entry, amountAfterReceipt);
+      case 10, 21 -> new DecreasedReceipt(entry, amountAfterReceipt);
+      case 16, 88 -> new MixedReceipt(entry, amountAfterReceipt);
+      default -> throw new IllegalArgumentException();
+    };
+  }
+
+  public void setSalesStats(int sales, int lessThan, int moreThan) {
+    this.sales = sales;
+    this.lowerPartOfSales = this.sales * lessThan / 100;
+    double x = (this.sales * moreThan) / 100.;
+    this.higherPartOfSales = x > (int) x ? (int) (x + 1) : (int) x;
+    this.partOfSales = this.amountBeforeReceipt * 100. / this.getSales();
   }
 
   @Override
@@ -51,8 +62,4 @@ public abstract class Receipt {
     return getDocumentId() == receipt.getDocumentId();
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(getDocumentId());
-  }
 }

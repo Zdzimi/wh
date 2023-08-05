@@ -16,10 +16,10 @@ select c from Commodity c
 left join fetch c.amount
 left join fetch c.documentEntries de
 left join fetch de.document d
-where c.id = ?1
+where c.id = ?1 and d.date >= ?2
 order by d.date desc, d.dayOrder desc, de.order desc
 """)
-  Optional<Commodity> findById(Long id);
+  Optional<Commodity> findById(Long id, Date date);
 
   @Query("""
 select c from Commodity c
