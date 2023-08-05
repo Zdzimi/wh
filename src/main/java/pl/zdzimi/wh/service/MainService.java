@@ -18,10 +18,10 @@ public class MainService {
   private final DateProvider dateProvider;
 
   public OrderAndDiscount getCandidates(int days, int lessThan, int moreThan) {
-    OrderAndDiscount orderAndDiscount = new OrderAndDiscount();
+    OrderAndDiscount orderAndDiscount = new OrderAndDiscount(lessThan, moreThan);
     commodityRepository.findAllAfter(dateProvider.beforeNow(days)).stream()
         .map(wareStatsMapper::map)
-        .forEach(wareStats -> orderAndDiscount.receiveIfMatch(wareStats, lessThan, moreThan));
+        .forEach(orderAndDiscount::receiveIfMatch);
     orderAndDiscount.sort();
     return orderAndDiscount;
   }

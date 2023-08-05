@@ -11,11 +11,13 @@ import pl.zdzimi.wh.data.entity.DocumentEntry;
 public class WareStatsMapper {
 
   private static final List<Integer> SALE_TYPES = Arrays.asList(10, 21);
+  private static final int PZ_TYPE = 2;
 
   public WareStats map(Commodity commodity) {
     WareStats wareStats = new WareStats();
 
     wareStats.setId(commodity.getId());
+    wareStats.setCode(commodity.getCode());
     wareStats.setName(commodity.getName());
     wareStats.setNetPrice(commodity.getNetPrice());
     wareStats.setGrossPrice(calculateGrossPrice(commodity));
@@ -32,11 +34,22 @@ public class WareStatsMapper {
   private int calculateSales(Commodity commodity) {
     int sales = 0;
     for (DocumentEntry entry : commodity.getDocumentEntries()) {
-      if (SALE_TYPES.contains(entry.getDocument().getType())) {
+      if (isSalesBill(entry)) {
         sales += entry.getIncreased();
+      }
+      if (isPzDocument(entry)) {
+        return sales;
       }
     }
     return sales;
+  }
+
+  private boolean isPzDocument(DocumentEntry entry) {
+    return entry.getDocument().getType() == PZ_TYPE;
+  }
+
+  private boolean isSalesBill(DocumentEntry entry) {
+    return SALE_TYPES.contains(entry.getDocument().getType());
   }
 
 }

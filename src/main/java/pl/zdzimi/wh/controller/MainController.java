@@ -17,7 +17,7 @@ public class MainController {
   @GetMapping("/commodity/{id}")
   public Ware getCommodity(
       @PathVariable long id,
-      @RequestParam(required = false, defaultValue = "30") int days,
+      @RequestParam(required = false, defaultValue = "365") int days,
       @RequestParam(required = false, defaultValue = "30") int lessThan,
       @RequestParam(required = false, defaultValue = "70") int moreThan
   ) {
@@ -26,7 +26,7 @@ public class MainController {
 
   @GetMapping("/commodity")
   public OrderAndDiscount getStats(
-      @RequestParam(required = false, defaultValue = "30") int days,
+      @RequestParam(required = false, defaultValue = "365") int days,
       @RequestParam(required = false, defaultValue = "30") int lessThan,
       @RequestParam(required = false, defaultValue = "70") int moreThan
   ) {
