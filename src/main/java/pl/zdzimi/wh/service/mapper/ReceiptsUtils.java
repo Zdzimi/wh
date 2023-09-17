@@ -31,7 +31,7 @@ class ReceiptsUtils {
         Receipt receipt = Receipt.create(entries.get(i), amountAfterReceipt);
         mergeAndAppend(
             receipt,
-            salesCalculator.calculateSales(entries.subList(i, entries.size() - 1), receipt.getDocumentId())
+            salesCalculator.calculateSales(entries.subList(i, entries.size()), receipt.getDocumentId())
         );
         amountAfterReceipt = receipt.getAmountBeforeReceipt();
       }
