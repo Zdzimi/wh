@@ -47,7 +47,7 @@ public abstract class Receipt {
     this.lowerPartOfSales = this.sales * lessThan / 100;
     double x = (this.sales * moreThan) / 100.;
     this.higherPartOfSales = x > (int) x ? (int) (x + 1) : (int) x;
-    this.partOfSales = this.amountBeforeReceipt * 100. / this.getSales();
+    this.partOfSales = this.amountAfterReceipt * 100. / this.getSales();
   }
 
   @Override

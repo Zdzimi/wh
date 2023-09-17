@@ -51,7 +51,6 @@ class ReceiptsUtils {
       oldReceipt.setIncreased(oldReceipt.getIncreased() + receipt.getIncreased());
       oldReceipt.setDecreased(oldReceipt.getDecreased() + receipt.getDecreased());
       oldReceipt.setAmountBeforeReceipt(receipt.getAmountBeforeReceipt());
-      oldReceipt.setSalesStats(sales, this.lessThan, this.moreThan);
     } else {
       receipt.setSalesStats(sales, this.lessThan, this.moreThan);
       this.receipts.add(receipt);
